@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">sf-movies-app</string>
+
+    <string translatable="false" name="app_name">SF Movies</string>
+
 </resources>
