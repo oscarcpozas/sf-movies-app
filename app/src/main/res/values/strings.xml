@@ -1,5 +1,6 @@
 <resources>
 
     <string translatable="false" name="app_name">SF Movies</string>
+    <string name="search_hint">Search...</string>
 
 </resources>
