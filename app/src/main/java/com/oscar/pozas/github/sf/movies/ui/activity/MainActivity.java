@@ -5,8 +5,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.oscar.pozas.github.sf.movies.Injection;
@@ -18,10 +21,11 @@ import com.oscar.pozas.github.sf.movies.utils.ActivityUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainFragment.LoadingIndicatorCallback {
 
-    // @BindView(R.id.search_filter_view)
-    MaterialSearchView mSearchView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.search_filter_view) MaterialSearchView mSearchView;
+    @BindView(R.id.progressBar) ProgressBar mProgressBar;
 
     @Override
     protected void onResume() {
@@ -35,14 +39,12 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         // Set up the toolbar.
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
 
         // Set up search view.
-        mSearchView = (MaterialSearchView) findViewById(R.id.search_filter_view);
         mSearchView.setVoiceSearch(false);
         mSearchView.setOnQueryTextListener(provideSearchViewListener());
 
@@ -91,6 +93,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         };
+    }
+
+    @Override
+    public void onVisibilityChange(boolean visible) {
+        mProgressBar.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
 }

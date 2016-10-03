@@ -1,5 +1,6 @@
 package com.oscar.pozas.github.sf.movies.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,9 +17,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.oscar.pozas.github.sf.movies.R;
 import com.oscar.pozas.github.sf.movies.ui.contract.MainContract;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class MainFragment extends Fragment implements MainContract.View, OnMapReadyCallback {
@@ -28,6 +26,7 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     private static final LatLng SF = new LatLng(37.7661679, -122.435493);
 
     private MainContract.Presenter mPresenter;
+    private LoadingIndicatorCallback mLoadingCallback;
 
     private GoogleMap mGMap;
     private static String searchQuery;
@@ -45,12 +44,17 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
         mPresenter.start();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mLoadingCallback = (LoadingIndicatorCallback) context;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.main_fragment, container, false);
-        ButterKnife.bind(this, root);
 
         SupportMapFragment gMapFragment = (SupportMapFragment)
                 getChildFragmentManager().findFragmentById(R.id.gmap);
@@ -77,12 +81,21 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     }
 
     @Override
+    public void setLoadingIndicatorView(boolean visible) {
+        mLoadingCallback.onVisibilityChange(visible);
+    }
+
+    @Override
     public boolean isActive() {
         return isAdded();
     }
 
     public static void setSearchTextQuery(String query) {
         searchQuery = query;
+    }
+
+    public interface LoadingIndicatorCallback {
+        void onVisibilityChange(boolean visible);
     }
 
 }

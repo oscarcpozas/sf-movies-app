@@ -9,6 +9,8 @@ public interface MainContract {
 
         void showMarksInMap();
 
+        void setLoadingIndicatorView(boolean visible);
+
         boolean isActive();
 
     }

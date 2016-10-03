@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.oscar.pozas.github.sf.movies.domain.UseCase;
 import com.oscar.pozas.github.sf.movies.domain.UseCaseHandler;
 import com.oscar.pozas.github.sf.movies.domain.main.usecase.GetFilms;
+import com.oscar.pozas.github.sf.movies.ui.activity.MainActivity;
 import com.oscar.pozas.github.sf.movies.ui.contract.MainContract;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -18,7 +19,7 @@ public class MainPresenter implements MainContract.Presenter {
 
     private boolean mFirstLoad = true;
 
-    public MainPresenter(@NonNull MainContract.View mainView,@NonNull UseCaseHandler useCaseHandler,
+    public MainPresenter(@NonNull MainContract.View mainView, @NonNull UseCaseHandler useCaseHandler,
                          @NonNull GetFilms getFilms) {
         mMainView = checkNotNull(mainView);
         mUseCaseHandler = checkNotNull(useCaseHandler);
@@ -39,11 +40,14 @@ public class MainPresenter implements MainContract.Presenter {
     public void loadLocations(boolean forceUpdate) {
         GetFilms.RequestValues requestValues = new GetFilms.RequestValues(forceUpdate);
 
+        mMainView.setLoadingIndicatorView(true);
+
         mUseCaseHandler.execute(mGetFilms, requestValues,
                 new UseCase.UseCaseCallback<GetFilms.ResponseValue>() {
             @Override
             public void onSuccess(GetFilms.ResponseValue response) {
                 mMainView.showMarksInMap();
+                mMainView.setLoadingIndicatorView(false);
             }
 
             @Override
