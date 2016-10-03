@@ -30,6 +30,7 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     private MainContract.Presenter mPresenter;
 
     private GoogleMap mGMap;
+    private static String searchQuery;
 
     @Override
     public void setPresenter(@NonNull MainContract.Presenter presenter) {
@@ -78,6 +79,10 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     @Override
     public boolean isActive() {
         return isAdded();
+    }
+
+    public static void setSearchTextQuery(String query) {
+        searchQuery = query;
     }
 
 }
