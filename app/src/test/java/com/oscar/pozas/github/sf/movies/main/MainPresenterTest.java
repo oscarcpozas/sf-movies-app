@@ -5,7 +5,7 @@ import com.oscar.pozas.github.sf.movies.TestUseCaseScheduler;
 import com.oscar.pozas.github.sf.movies.data.source.FilmsDataSource;
 import com.oscar.pozas.github.sf.movies.data.source.FilmsRepository;
 import com.oscar.pozas.github.sf.movies.domain.UseCaseHandler;
-import com.oscar.pozas.github.sf.movies.domain.main.model.Films;
+import com.oscar.pozas.github.sf.movies.domain.main.model.Film;
 import com.oscar.pozas.github.sf.movies.domain.main.usecase.GetFilms;
 import com.oscar.pozas.github.sf.movies.ui.contract.MainContract;
 import com.oscar.pozas.github.sf.movies.ui.presenter.MainPresenter;
@@ -19,7 +19,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -53,7 +52,7 @@ public class MainPresenterTest {
     public void loadAllFilmsAndLoadIntoView() {
         mMainPresenter.loadLocations(true);
 
-        List<Films> films = Lists.newArrayList(); // Empty for test.
+        List<Film> films = Lists.newArrayList(); // Empty for test.
 
         verify(mFilmsRepository).getFilms(mGetFilmsCallbackArgumentCaptor.capture());
         mGetFilmsCallbackArgumentCaptor.getValue().onFilmsLoaded(films);

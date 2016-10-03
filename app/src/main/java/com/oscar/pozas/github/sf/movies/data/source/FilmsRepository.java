@@ -28,7 +28,7 @@ public class FilmsRepository implements FilmsDataSource {
     public void getFilms(@NonNull GetFilmsCallback callback) {
         checkNotNull(callback);
 
-
+        mFilmsRemoteDateSource.getFilms(callback);
     }
 
 }

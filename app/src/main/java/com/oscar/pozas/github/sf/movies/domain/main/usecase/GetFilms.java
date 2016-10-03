@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import com.oscar.pozas.github.sf.movies.data.source.FilmsDataSource;
 import com.oscar.pozas.github.sf.movies.data.source.FilmsRepository;
 import com.oscar.pozas.github.sf.movies.domain.UseCase;
-import com.oscar.pozas.github.sf.movies.domain.main.model.Films;
+import com.oscar.pozas.github.sf.movies.domain.main.model.Film;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class GetFilms extends UseCase<GetFilms.RequestValues, GetFilms.ResponseV
     protected void executeUseCase(final RequestValues requestValues) {
         mFilmsRepository.getFilms(new FilmsDataSource.GetFilmsCallback() {
             @Override
-            public void onFilmsLoaded(List<Films> films) {
+            public void onFilmsLoaded(List<Film> films) {
                 ResponseValue responseValue = new ResponseValue(films);
                 getUseCaseCallback().onSuccess(responseValue);
             }
@@ -50,13 +50,13 @@ public class GetFilms extends UseCase<GetFilms.RequestValues, GetFilms.ResponseV
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        private final List<Films> mFilms;
+        private final List<Film> mFilms;
 
-        public ResponseValue(@NonNull List<Films> films) {
+        public ResponseValue(@NonNull List<Film> films) {
             mFilms = checkNotNull(films, "films cannot be null!");
         }
 
-        public List<Films> getFilms() {
+        public List<Film> getFilms() {
             return mFilms;
         }
     }

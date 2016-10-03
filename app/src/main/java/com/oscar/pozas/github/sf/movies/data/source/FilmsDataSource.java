@@ -1,13 +1,13 @@
 package com.oscar.pozas.github.sf.movies.data.source;
 
-import com.oscar.pozas.github.sf.movies.domain.main.model.Films;
+import com.oscar.pozas.github.sf.movies.domain.main.model.Film;
 
 import java.util.List;
 
 public interface FilmsDataSource {
 
     interface GetFilmsCallback {
-        void onFilmsLoaded(List<Films> films);
+        void onFilmsLoaded(List<Film> films);
         void onFilmsLoadedFail();
     }
 
