@@ -46,7 +46,7 @@ public class MainPresenter implements MainContract.Presenter {
                 new UseCase.UseCaseCallback<GetFilms.ResponseValue>() {
             @Override
             public void onSuccess(GetFilms.ResponseValue response) {
-                mMainView.showMarksInMap();
+                mMainView.showMarksInMap(response.getFilms());
                 mMainView.setLoadingIndicatorView(false);
             }
 

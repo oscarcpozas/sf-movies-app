@@ -19,6 +19,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
+                android:titleTextColor="@android:color/white"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
             <com.miguelcatalan.materialsearchview.MaterialSearchView
@@ -35,7 +36,7 @@
             android:layout_marginBottom="-7dp"
             android:layout_marginTop="-3dp"
             android:indeterminate="true"
-            android:visibility="gone"
+            android:visibility="invisible"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
 
     </android.support.design.widget.AppBarLayout>

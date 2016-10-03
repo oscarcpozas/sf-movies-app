@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Load
 
     @Override
     public void onVisibilityChange(boolean visible) {
-        mProgressBar.setVisibility(visible ? View.VISIBLE : View.GONE);
+        mProgressBar.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
     }
 
 }

@@ -18,7 +18,7 @@ public class Injection {
 
     public static FilmsRepository getFilmsRepository(@NonNull Context context) {
         checkNotNull(context);
-        return FilmsRepository.getInstance(FilmsRemoteDataSource.getInstance());
+        return FilmsRepository.getInstance(FilmsRemoteDataSource.getInstance(context));
     }
 
     /**
