@@ -85,7 +85,7 @@ public class FilmsRemoteDataSource implements FilmsDataSource {
                     }
                 }
             } catch (IOException e) {
-                
+
             }
         }
         return filmsResult;
