@@ -19,7 +19,6 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
-                android:titleTextColor="@android:color/white"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
             <com.miguelcatalan.materialsearchview.MaterialSearchView
@@ -29,21 +28,26 @@
 
         </FrameLayout>
 
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/contentFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="-7dp"
-            android:layout_marginTop="-3dp"
+            android:layout_marginTop="-6dp"
             android:indeterminate="true"
             android:visibility="invisible"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
 
-    </android.support.design.widget.AppBarLayout>
-
-    <FrameLayout
-        android:id="@+id/contentFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    </FrameLayout>
 
 </LinearLayout>

@@ -106,6 +106,11 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     }
 
     @Override
+    public void showSuggestedSearch() {
+
+    }
+
+    @Override
     public void setLoadingIndicatorView(boolean visible) {
         mLoadingCallback.onVisibilityChange(visible);
     }

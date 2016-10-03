@@ -59,4 +59,9 @@ public class MainPresenter implements MainContract.Presenter {
         if(mFirstLoad) mFirstLoad = false;
     }
 
+    @Override
+    public void searchQuery(String query) {
+        loadLocations(false);
+    }
+
 }

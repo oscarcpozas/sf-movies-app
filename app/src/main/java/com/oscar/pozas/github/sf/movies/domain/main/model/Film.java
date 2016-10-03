@@ -3,7 +3,9 @@ package com.oscar.pozas.github.sf.movies.domain.main.model;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.orm.dsl.Table;
 
+@Table
 public class Film {
 
     @SerializedName("title") private String title;
@@ -12,6 +14,7 @@ public class Film {
     @SerializedName("distributor") private String productionCompany;
     @SerializedName("director") private String director;
 
+    @Expose private long id;
     @Expose private LatLng streetLocation;
 
     public String getTitle() {
@@ -61,4 +64,5 @@ public class Film {
     public void setStreetLocation(LatLng streetLocation) {
         this.streetLocation = streetLocation;
     }
+
 }

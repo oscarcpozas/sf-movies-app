@@ -13,4 +13,6 @@ public interface FilmsDataSource {
 
     void getFilms(GetFilmsCallback callback);
 
+    void getFilms(String query, GetFilmsCallback callback);
+
 }

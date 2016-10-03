@@ -1,24 +1,20 @@
 package com.oscar.pozas.github.sf.movies.data.source.remote;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.oscar.pozas.github.sf.movies.R;
 import com.oscar.pozas.github.sf.movies.data.source.FilmsDataSource;
 import com.oscar.pozas.github.sf.movies.domain.main.model.Film;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -30,11 +26,14 @@ public class FilmsRemoteDataSource implements FilmsDataSource {
 
     public static FilmsRemoteDataSource INSTANCE;
 
-    private final Context mContext;
+    private final String baseURL = "https://data.sfgov.org/resource/wwmu-gmzc.json";
+
+    private final Geocoder mGeocoder;
 
     // Prevent direct instantation.
-    private FilmsRemoteDataSource(@NonNull  Context context) {
-        mContext = checkNotNull(context);
+    private FilmsRemoteDataSource(@NonNull Context context) {
+        checkNotNull(context);
+        mGeocoder = new Geocoder(context);
     }
 
     public static FilmsRemoteDataSource getInstance(Context context) {
@@ -48,8 +47,7 @@ public class FilmsRemoteDataSource implements FilmsDataSource {
     public void getFilms(@NonNull GetFilmsCallback callback) {
         final OkHttpClient httpClient = new OkHttpClient();
 
-        Request request = new Request.Builder()
-                .url("https://data.sfgov.org/resource/wwmu-gmzc.json")
+        Request request = new Request.Builder().url(baseURL)
                 .build();
 
         try {
@@ -64,16 +62,20 @@ public class FilmsRemoteDataSource implements FilmsDataSource {
         } catch (IOException e) { callback.onFilmsLoadedFail(); }
     }
 
+    @Override
+    public void getFilms(String query, GetFilmsCallback callback) {
+        // No querys for remotte server
+    }
+
     private List<Film> parseFilms(List<Film> films) { // TODO Improve better logic
         List<Film> filmsResult = new ArrayList<>();
-        Geocoder geocoder = new Geocoder(mContext);
         for(Film film : films) {
             try {
                 if(film.getLocation() != null && !film.getLocation().isEmpty()) {
                     final String street = film.getLocation() + ", San Francisco, CA";
-                    Log.d("LOCATION", street);
+                    Log.d("LOCATIONS", street);
 
-                    List<Address> streetLocation = geocoder.getFromLocationName(street, 1);
+                    List<Address> streetLocation = mGeocoder.getFromLocationName(street, 1);
 
                     if(!streetLocation.isEmpty()) {
                         LatLng location = new LatLng(streetLocation.get(0).getLatitude(),
@@ -83,7 +85,7 @@ public class FilmsRemoteDataSource implements FilmsDataSource {
                     }
                 }
             } catch (IOException e) {
-
+                
             }
         }
         return filmsResult;
