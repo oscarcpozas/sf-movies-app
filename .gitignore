@@ -34,9 +34,9 @@ proguard/
 captures/
 
 # Intellij
-*.iml
 .idea/workspace.xml
 .idea/libraries
+.idea
 
 # Keystore files
 *.jks
@@ -93,7 +93,7 @@ fabric.properties
 
  *.iml
 # modules.xml
- .idea/misc.xml 
+ .idea/misc.xml
 # *.ipr
 
 
