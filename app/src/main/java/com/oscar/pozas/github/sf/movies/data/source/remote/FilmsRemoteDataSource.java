@@ -79,7 +79,7 @@ public class FilmsRemoteDataSource implements FilmsDataSource {
         List<Film> filmsResult = new ArrayList<>();
         for(Film film : films) {
             try {
-                if(film.getReleaseYear() < minValue && film.getReleaseYear() > maxValue) {
+                if(film.getReleaseYear() > minValue && film.getReleaseYear() < maxValue) {
                     if (film.getLocation() != null && !film.getLocation().isEmpty()) {
                         final String street = film.getLocation() + ", San Francisco, CA";
                         Log.d("LOCATIONS", street);
