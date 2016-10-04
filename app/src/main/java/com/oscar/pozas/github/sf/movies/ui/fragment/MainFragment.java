@@ -61,7 +61,6 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     private LoadingIndicatorCallback mLoadingCallback;
 
     private GoogleMap mGMap;
-    private Geocoder mGeocoder;
 
     private int minValue = 1995;
     private int maxValue = 2016;
@@ -93,10 +92,13 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
         ButterKnife.bind(this, root);
 
         bottomSheetBehavior = BottomSheetBehavior.from(mBottomSheetViewgroup);
+        bottomSheetBehavior.setHideable(true);
 
         mRangeBarView.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
             @Override
-            public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex, int rightPinIndex, String leftPinValue, String rightPinValue) {
+            public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex,
+                                              int rightPinIndex, String leftPinValue,
+                                              String rightPinValue) {
                 minValue = Integer.parseInt(leftPinValue);
                 maxValue = Integer.parseInt(rightPinValue);
             }
@@ -105,7 +107,9 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mPresenter != null) {
+                if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                } else if(mPresenter != null) {
                     mPresenter.loadLocations(true, minValue, maxValue);
                 }
             }
@@ -142,14 +146,9 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     }
 
     @Override
-    public void showSuggestedSearch() {
-
-    }
-
-    @Override
     public void setFilterSheetView(boolean visible) {
         bottomSheetBehavior.setState(visible ? BottomSheetBehavior.STATE_EXPANDED :
-                BottomSheetBehavior.STATE_COLLAPSED);
+                BottomSheetBehavior.STATE_HIDDEN);
     }
 
     @Override

@@ -75,14 +75,14 @@ public class FilmsRemoteDataSource implements FilmsDataSource {
 
     }
 
-    private List<Film> parseFilms(List<Film> films, int minValue, int maxValue) { // TODO Improve better logic
+    private List<Film> parseFilms(List<Film> films, int minValue, int maxValue) {
         List<Film> filmsResult = new ArrayList<>();
         for(Film film : films) {
             try {
-                if(film.getReleaseYear() > minValue && film.getReleaseYear() < maxValue) {
+                if(film.getReleaseYear() >= minValue && film.getReleaseYear() <= maxValue) {
                     if (film.getLocation() != null && !film.getLocation().isEmpty()) {
                         final String street = film.getLocation() + ", San Francisco, CA";
-                        Log.d("LOCATIONS", street);
+                        Log.d("SFAPP", "location:received:" + street);
 
                         List<Address> streetLocation = mGeocoder.getFromLocationName(street, 1);
 

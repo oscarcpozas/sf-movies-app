@@ -31,7 +31,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void start() {
         if(mFirstLoad) {
-            mMainView.setFilterSheetView(false);
+            mMainView.setFilterSheetView(true);
         }
     }
 
@@ -43,6 +43,7 @@ public class MainPresenter implements MainContract.Presenter {
         GetFilms.RequestValues requestValues = new
                 GetFilms.RequestValues(forceUpdate, minValue, maxValue);
 
+        mMainView.setFilterSheetView(false);
         mMainView.setLoadingIndicatorView(true);
 
         mUseCaseHandler.execute(mGetFilms, requestValues,
@@ -60,11 +61,6 @@ public class MainPresenter implements MainContract.Presenter {
         });
 
         if(mFirstLoad) mFirstLoad = false;
-    }
-
-    @Override
-    public void searchQuery(String query) {
-        // loadLocations(false);
     }
 
 }

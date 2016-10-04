@@ -12,8 +12,6 @@ public interface MainContract {
 
         void showMarksInMap(List<Film> films);
 
-        void showSuggestedSearch();
-
         void setFilterSheetView(boolean visible);
 
         void setLoadingIndicatorView(boolean visible);
@@ -25,8 +23,6 @@ public interface MainContract {
     interface Presenter extends BasePresenter {
 
         void loadLocations(boolean forceUpdate, int minValue, int maxValue);
-
-        void searchQuery(String query);
 
     }
 
