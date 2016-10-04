@@ -5,21 +5,26 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
+import com.appyvet.rangebar.RangeBar;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,8 +37,10 @@ import com.oscar.pozas.github.sf.movies.R;
 import com.oscar.pozas.github.sf.movies.domain.main.model.Film;
 import com.oscar.pozas.github.sf.movies.ui.contract.MainContract;
 
-import java.io.IOException;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -44,11 +51,19 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     private static final LatLng SF = new LatLng(37.7661679, -122.435493);
 
     private MainContract.Presenter mPresenter;
+
+    @BindView(R.id.sheet_view) LinearLayout mBottomSheetViewgroup;
+    @BindView(R.id.rangebar) RangeBar mRangeBarView;
+    @BindView(R.id.fab_filter_view) FloatingActionButton button;
+
+    private BottomSheetBehavior bottomSheetBehavior;
+
     private LoadingIndicatorCallback mLoadingCallback;
 
     private GoogleMap mGMap;
-    private Geocoder mGeocoder;
-    private static String searchQuery;
+
+    private int minValue = 1995;
+    private int maxValue = 2016;
 
     @Override
     public void setPresenter(@NonNull MainContract.Presenter presenter) {
@@ -74,6 +89,31 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.main_fragment, container, false);
+        ButterKnife.bind(this, root);
+
+        bottomSheetBehavior = BottomSheetBehavior.from(mBottomSheetViewgroup);
+        bottomSheetBehavior.setHideable(true);
+
+        mRangeBarView.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+            @Override
+            public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex,
+                                              int rightPinIndex, String leftPinValue,
+                                              String rightPinValue) {
+                minValue = Integer.parseInt(leftPinValue);
+                maxValue = Integer.parseInt(rightPinValue);
+            }
+        });
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                } else if(mPresenter != null) {
+                    mPresenter.loadLocations(true, minValue, maxValue);
+                }
+            }
+        });
 
         SupportMapFragment gMapFragment = (SupportMapFragment)
                 getChildFragmentManager().findFragmentById(R.id.gmap);
@@ -106,8 +146,9 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     }
 
     @Override
-    public void showSuggestedSearch() {
-
+    public void setFilterSheetView(boolean visible) {
+        bottomSheetBehavior.setState(visible ? BottomSheetBehavior.STATE_EXPANDED :
+                BottomSheetBehavior.STATE_HIDDEN);
     }
 
     @Override
@@ -118,10 +159,6 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     @Override
     public boolean isActive() {
         return isAdded();
-    }
-
-    public static void setSearchTextQuery(String query) {
-        searchQuery = query;
     }
 
     public interface LoadingIndicatorCallback {

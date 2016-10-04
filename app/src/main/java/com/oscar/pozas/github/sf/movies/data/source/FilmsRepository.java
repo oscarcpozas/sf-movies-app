@@ -2,7 +2,9 @@ package com.oscar.pozas.github.sf.movies.data.source;
 
 import android.support.annotation.NonNull;
 
+import com.oscar.pozas.github.sf.movies.domain.UseCase;
 import com.oscar.pozas.github.sf.movies.domain.main.model.Film;
+import com.oscar.pozas.github.sf.movies.domain.main.usecase.GetFilms;
 
 import java.util.List;
 
@@ -14,7 +16,8 @@ public class FilmsRepository implements FilmsDataSource {
 
     private final FilmsDataSource mFilmsRemoteDateSource;
 
-    private List<Film> mFilmsCache;
+    private List<Film> mFilmsCache = null;
+    private boolean mCacheCorrupted = true;
 
     // Prevent direct instantation.
     private FilmsRepository(@NonNull FilmsDataSource filmsRemoteDateSource) {
@@ -31,15 +34,16 @@ public class FilmsRepository implements FilmsDataSource {
     public static void destroyFilmsRepository() { INSTANCE = null; }
 
     @Override
-    public void getFilms(@NonNull final GetFilmsCallback callback) {
+    public void getFilms(GetFilms.RequestValues requestValues,
+                         @NonNull final GetFilmsCallback callback) {
         checkNotNull(callback);
 
-        if(mFilmsCache != null) { // TODO Improve check dirty cache.
+        if(mFilmsCache != null && !mCacheCorrupted) {
             callback.onFilmsLoaded(mFilmsCache);
             return;
         }
 
-        mFilmsRemoteDateSource.getFilms(new GetFilmsCallback() {
+        mFilmsRemoteDateSource.getFilms(requestValues, new GetFilmsCallback() {
             @Override
             public void onFilmsLoaded(List<Film> films) {
                 mFilmsCache = films;
@@ -54,7 +58,21 @@ public class FilmsRepository implements FilmsDataSource {
     }
 
     @Override
-    public void getFilms(String query, GetFilmsCallback callback) {
+    public void getFilms(GetFilms.RequestValues requestValues,
+                         @NonNull String query, @NonNull GetFilmsCallback callback) {
+        checkNotNull(query);
+        checkNotNull(callback);
+
+        if(mFilmsCache != null && !mCacheCorrupted) {
+            callback.onFilmsLoaded(mFilmsCache);
+            return;
+        }
+
+
+    }
+
+    @Override
+    public void saveFilms(@NonNull List<Film> films) {
 
     }
 

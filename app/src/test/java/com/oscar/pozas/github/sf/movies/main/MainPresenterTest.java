@@ -50,14 +50,21 @@ public class MainPresenterTest {
 
     @Test
     public void loadAllFilmsAndLoadIntoView() {
-        mMainPresenter.loadLocations(true);
+        mMainPresenter.loadLocations(true, 0, 0);
 
         List<Film> films = Lists.newArrayList(); // Empty for test.
 
-        verify(mFilmsRepository).getFilms(mGetFilmsCallbackArgumentCaptor.capture());
-        mGetFilmsCallbackArgumentCaptor.getValue().onFilmsLoaded(films);
+        // verify(mFilmsRepository).getFilms(mGetFilmsCallbackArgumentCaptor.capture());
+        // mGetFilmsCallbackArgumentCaptor.getValue().onFilmsLoaded(films);
 
-        verify(mMainView).showMarksInMap();
+        verify(mMainView).showMarksInMap(films);
+    }
+
+    @Test
+    public void searchFilmByNameAndLoadIntoView() {
+        mMainPresenter.searchQuery("");
+
+        verify(mFilmsRepository);
     }
     
 }

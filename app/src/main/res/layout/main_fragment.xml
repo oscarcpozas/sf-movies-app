@@ -1,6 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/gmap"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:name="com.google.android.gms.maps.SupportMapFragment" />
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <fragment
+            android:id="@+id/gmap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sheet_view"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#f7fafb"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_filter_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <com.appyvet.rangebar.RangeBar
+            android:id="@+id/rangebar"
+            android:layout_margin="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            app:pinRadius="23dp"
+            app:pinMinFont="12sp"
+            app:tickStart="1915"
+            app:tickInterval="5"
+            app:tickEnd="2016"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_filter_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_place_holder_white"
+        app:layout_anchor="@id/sheet_view"
+        app:layout_anchorGravity="end"/>
+
+</android.support.design.widget.CoordinatorLayout>

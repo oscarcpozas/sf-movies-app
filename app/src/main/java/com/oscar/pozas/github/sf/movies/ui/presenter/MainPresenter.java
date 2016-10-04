@@ -30,16 +30,20 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void start() {
-        loadLocations(false);
+        if(mFirstLoad) {
+            mMainView.setFilterSheetView(true);
+        }
     }
 
     /**
      * @param forceUpdate Pass in true to refresh data over network
      */
     @Override
-    public void loadLocations(boolean forceUpdate) {
-        GetFilms.RequestValues requestValues = new GetFilms.RequestValues(forceUpdate);
+    public void loadLocations(boolean forceUpdate, int minValue, int maxValue) {
+        GetFilms.RequestValues requestValues = new
+                GetFilms.RequestValues(forceUpdate, minValue, maxValue);
 
+        mMainView.setFilterSheetView(false);
         mMainView.setLoadingIndicatorView(true);
 
         mUseCaseHandler.execute(mGetFilms, requestValues,
@@ -57,11 +61,6 @@ public class MainPresenter implements MainContract.Presenter {
         });
 
         if(mFirstLoad) mFirstLoad = false;
-    }
-
-    @Override
-    public void searchQuery(String query) {
-        loadLocations(false);
     }
 
 }
