@@ -2,7 +2,6 @@ package com.oscar.pozas.github.sf.movies.data.source;
 
 import android.support.annotation.NonNull;
 
-import com.oscar.pozas.github.sf.movies.domain.UseCase;
 import com.oscar.pozas.github.sf.movies.domain.main.model.Film;
 import com.oscar.pozas.github.sf.movies.domain.main.usecase.GetFilms;
 
@@ -15,18 +14,22 @@ public class FilmsRepository implements FilmsDataSource {
     private static FilmsRepository INSTANCE = null;
 
     private final FilmsDataSource mFilmsRemoteDateSource;
+    private final FilmsDataSource mFilmsLocalDataSource;
 
     private List<Film> mFilmsCache = null;
     private boolean mCacheCorrupted = true;
 
     // Prevent direct instantation.
-    private FilmsRepository(@NonNull FilmsDataSource filmsRemoteDateSource) {
+    private FilmsRepository(@NonNull FilmsDataSource filmsRemoteDateSource,
+                            @NonNull FilmsDataSource filmsLocalDataSource) {
         mFilmsRemoteDateSource = checkNotNull(filmsRemoteDateSource);
+        mFilmsLocalDataSource = checkNotNull(filmsLocalDataSource);
     }
 
-    public static FilmsRepository getInstance(FilmsDataSource filmsRemoteDateSource) {
+    public static FilmsRepository getInstance(FilmsDataSource filmsRemoteDateSource,
+                                              FilmsDataSource filmsLocalDataSource) {
         if(INSTANCE == null) {
-            return new FilmsRepository(filmsRemoteDateSource);
+            return new FilmsRepository(filmsRemoteDateSource, filmsLocalDataSource);
         }
         return INSTANCE;
     }
@@ -73,7 +76,7 @@ public class FilmsRepository implements FilmsDataSource {
 
     @Override
     public void saveFilms(@NonNull List<Film> films) {
-
+        mFilmsLocalDataSource.saveFilms(films);
     }
 
 }

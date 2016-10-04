@@ -11,8 +11,8 @@ Puedes cargar todas las peliculas en rangos de tiempo 10 años o hacer una busqu
 
 ## Arquitectura del proyecto
 
-La arquitectura que he elegido es una implementación de la 'Clean Arquitecture' de [Uncle Bob]().
-Y el proyecto esta basado en un [ejemplo de Jorge Barroso]().
+La arquitectura que he elegido es una implementación de la 'Clean Arquitecture' de [Uncle Bob](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html).
+Y el proyecto esta basado en un [ejemplo de Jorge Barroso](https://github.com/googlesamples/android-architecture/tree/todo-mvp-clean).
 
 Se divide en 3 capas (layers) donde por una parte esta la vista que pinta la pantalla y utiliza un Presenter para comunicarse con la capa repositorio.
 
@@ -25,7 +25,7 @@ La idea de usar esta arquitectura es conseguir una aplicación facil de testar y
 
 ## Librerias usadas
 
-Empezando por la parte de la View, he utilizado **ButterKnife** para injectar las vistas usadas en cada pantalla. **MaterialSearchView** para la implementación de la barra de busqueda.
+Empezando por la parte de la View, he utilizado **ButterKnife** para injectar las vistas usadas en cada pantalla. Y **Materialrangebar** para pintar un seekbar con 2 thumbs.
 
 Importe **Dexter** como helper para los permisos que requiera la app, como usar el microfono en la busqueda.
 

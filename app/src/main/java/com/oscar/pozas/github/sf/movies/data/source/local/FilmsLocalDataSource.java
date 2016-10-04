@@ -42,7 +42,7 @@ public class FilmsLocalDataSource implements FilmsDataSource {
 
     }
 
-    public void saveFilms(List<Film> films) { // TODO Improve better logic
+    public void saveFilms(@NonNull List<Film> films) {
         SugarRecord.deleteAll(Film.class);
         SugarRecord.saveInTx(films);
     }
