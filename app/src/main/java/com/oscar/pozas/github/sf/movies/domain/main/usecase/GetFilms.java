@@ -1,6 +1,7 @@
 package com.oscar.pozas.github.sf.movies.domain.main.usecase;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.oscar.pozas.github.sf.movies.data.source.FilmsDataSource;
 import com.oscar.pozas.github.sf.movies.data.source.FilmsRepository;
@@ -41,7 +42,7 @@ public class GetFilms extends UseCase<GetFilms.RequestValues, GetFilms.ResponseV
         private final int mMinValue;
         private final int mMaxValue;
 
-        public RequestValues(boolean forceUpdate, int minValue, int maxValue) {
+        public RequestValues(boolean forceUpdate, @Nullable int minValue, @Nullable int maxValue) {
             mForceUpdate = forceUpdate;
             mMinValue = minValue;
             mMaxValue = maxValue;

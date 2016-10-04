@@ -16,8 +16,8 @@ public class FilmsRepository implements FilmsDataSource {
 
     private final FilmsDataSource mFilmsRemoteDateSource;
 
-    private List<Film> mFilmsCache;
-    private boolean mCacheCorrupted = false;
+    private List<Film> mFilmsCache = null;
+    private boolean mCacheCorrupted = true;
 
     // Prevent direct instantation.
     private FilmsRepository(@NonNull FilmsDataSource filmsRemoteDateSource) {

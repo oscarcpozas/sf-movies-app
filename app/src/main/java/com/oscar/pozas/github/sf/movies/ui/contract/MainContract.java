@@ -14,7 +14,7 @@ public interface MainContract {
 
         void showSuggestedSearch();
 
-        void showFilterDialog();
+        void setFilterSheetView(boolean visible);
 
         void setLoadingIndicatorView(boolean visible);
 

@@ -31,8 +31,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void start() {
         if(mFirstLoad) {
-            mMainView.setLoadingIndicatorView(true);
-            mMainView.showFilterDialog();
+            mMainView.setFilterSheetView(false);
         }
     }
 

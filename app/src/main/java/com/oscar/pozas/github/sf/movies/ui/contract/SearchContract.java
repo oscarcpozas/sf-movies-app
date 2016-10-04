@@ -7,9 +7,13 @@ public interface SearchContract {
 
     interface View extends BaseView<Presenter> {
 
+        void setLoadingIndicatorView(boolean visible);
+
     }
 
     interface Presenter extends BasePresenter {
+
+        void querySearch(String query);
 
     }
 
