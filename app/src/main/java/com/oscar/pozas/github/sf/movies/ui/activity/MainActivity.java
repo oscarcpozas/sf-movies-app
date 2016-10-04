@@ -1,17 +1,16 @@
 package com.oscar.pozas.github.sf.movies.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.oscar.pozas.github.sf.movies.Injection;
 import com.oscar.pozas.github.sf.movies.R;
 import com.oscar.pozas.github.sf.movies.ui.fragment.MainFragment;
@@ -21,10 +20,10 @@ import com.oscar.pozas.github.sf.movies.utils.ActivityUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.LoadingIndicatorCallback {
+public class MainActivity extends AppCompatActivity implements
+        MainFragment.LoadingIndicatorCallback {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.search_filter_view) MaterialSearchView mSearchView;
+    @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.progressBar) ProgressBar mProgressBar;
 
     @Override
@@ -39,14 +38,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Load
         ButterKnife.bind(this);
 
         // Set up the toolbar.
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
-
-        // Set up search view.
-        mSearchView.setVoiceSearch(false);
-        mSearchView.setOnQueryTextListener(provideSearchViewListener());
 
         // Create fragment.
         final FragmentManager fm = getSupportFragmentManager();
@@ -60,39 +55,23 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Load
 
     @Override
     public boolean onSupportNavigateUp() {
-        if(mSearchView.isSearchOpen()) {
-            mSearchView.closeSearch();
-        } else onBackPressed();
-
+        onBackPressed();
         return true;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
-
-        MenuItem item = menu.findItem(R.id.action_search_filter);
-        mSearchView.setMenuItem(item);
-
         return true;
     }
 
-    private MaterialSearchView.OnQueryTextListener provideSearchViewListener() {
-        return new MaterialSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                MainFragment.setSearchTextQuery(query);
-
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                MainFragment.setSearchTextQuery(newText);
-
-                return true;
-            }
-        };
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search_filter:
+                startActivity(new Intent(this, SearchActivity.class));
+                break;
+        }
+        return true;
     }
 
     @Override

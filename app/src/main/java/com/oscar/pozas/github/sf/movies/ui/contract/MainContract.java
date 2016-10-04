@@ -14,6 +14,8 @@ public interface MainContract {
 
         void showSuggestedSearch();
 
+        void showFilterDialog();
+
         void setLoadingIndicatorView(boolean visible);
 
         boolean isActive();
@@ -22,7 +24,7 @@ public interface MainContract {
 
     interface Presenter extends BasePresenter {
 
-        void loadLocations(boolean forceUpdate);
+        void loadLocations(boolean forceUpdate, int minValue, int maxValue);
 
         void searchQuery(String query);
 

@@ -1,11 +1,11 @@
 package com.oscar.pozas.github.sf.movies.ui.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
@@ -15,11 +15,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.appyvet.rangebar.RangeBar;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,7 +34,6 @@ import com.oscar.pozas.github.sf.movies.R;
 import com.oscar.pozas.github.sf.movies.domain.main.model.Film;
 import com.oscar.pozas.github.sf.movies.ui.contract.MainContract;
 
-import java.io.IOException;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -44,11 +45,15 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     private static final LatLng SF = new LatLng(37.7661679, -122.435493);
 
     private MainContract.Presenter mPresenter;
+
     private LoadingIndicatorCallback mLoadingCallback;
 
     private GoogleMap mGMap;
+    private AlertDialog mDialogFilter;
     private Geocoder mGeocoder;
-    private static String searchQuery;
+
+    private String leftValue = "1995";
+    private String rightValue = "2016";
 
     @Override
     public void setPresenter(@NonNull MainContract.Presenter presenter) {
@@ -78,6 +83,11 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
         SupportMapFragment gMapFragment = (SupportMapFragment)
                 getChildFragmentManager().findFragmentById(R.id.gmap);
         gMapFragment.getMapAsync(this);
+
+        // Setup dialog filter.
+        mDialogFilter = buildDialogFilter();
+        mDialogFilter.setCancelable(false);
+        mDialogFilter.setCanceledOnTouchOutside(false);
 
         return root;
     }
@@ -111,6 +121,13 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
     }
 
     @Override
+    public void showFilterDialog() {
+        if(!mDialogFilter.isShowing()) {
+            mDialogFilter.show();
+        }
+    }
+
+    @Override
     public void setLoadingIndicatorView(boolean visible) {
         mLoadingCallback.onVisibilityChange(visible);
     }
@@ -120,12 +137,43 @@ public class MainFragment extends Fragment implements MainContract.View, OnMapRe
         return isAdded();
     }
 
-    public static void setSearchTextQuery(String query) {
-        searchQuery = query;
-    }
-
     public interface LoadingIndicatorCallback {
         void onVisibilityChange(boolean visible);
+    }
+
+    private AlertDialog buildDialogFilter() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.main_dialog, null);
+
+        builder.setTitle(R.string.dialog_filter_name)
+                .setView(dialogView)
+                .setView(R.layout.main_dialog)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        int aValue = Integer.parseInt(leftValue);
+                        int bValue = Integer.parseInt(rightValue);
+                        if(aValue > bValue) {
+                            mPresenter.loadLocations(true, bValue, aValue);
+                        } else {
+                            mPresenter.loadLocations(true, aValue, bValue);
+                        }
+                    }
+                });
+
+        RangeBar rangeBar = (RangeBar) dialogView.findViewById(R.id.range_bar_view);
+        rangeBar.setOnRangeBarChangeListener(new RangeBar.OnRangeBarChangeListener() {
+            @Override
+            public void onRangeChangeListener(RangeBar rangeBar, int leftPinIndex,
+                                              int rightPinIndex, String leftPinValue,
+                                              String rightPinValue) {
+                leftValue = leftPinValue;
+                rightValue = rightPinValue;
+            }
+        });
+
+        return builder.create();
     }
 
     private BitmapDescriptor vectorToBitmap(@DrawableRes int id, @ColorInt int color) {

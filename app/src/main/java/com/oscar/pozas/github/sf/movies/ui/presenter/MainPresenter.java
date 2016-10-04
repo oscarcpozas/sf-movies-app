@@ -30,15 +30,19 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void start() {
-        loadLocations(false);
+        if(mFirstLoad) {
+            mMainView.setLoadingIndicatorView(true);
+            mMainView.showFilterDialog();
+        }
     }
 
     /**
      * @param forceUpdate Pass in true to refresh data over network
      */
     @Override
-    public void loadLocations(boolean forceUpdate) {
-        GetFilms.RequestValues requestValues = new GetFilms.RequestValues(forceUpdate);
+    public void loadLocations(boolean forceUpdate, int minValue, int maxValue) {
+        GetFilms.RequestValues requestValues = new
+                GetFilms.RequestValues(forceUpdate, minValue, maxValue);
 
         mMainView.setLoadingIndicatorView(true);
 
@@ -61,7 +65,7 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void searchQuery(String query) {
-        loadLocations(false);
+        // loadLocations(false);
     }
 
 }

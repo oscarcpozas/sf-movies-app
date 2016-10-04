@@ -30,7 +30,6 @@ public class UseCaseHandler {
         });
     }
 
-
     /**
      * Solution for come back UI thread. Idea from Karumi repo.
      */

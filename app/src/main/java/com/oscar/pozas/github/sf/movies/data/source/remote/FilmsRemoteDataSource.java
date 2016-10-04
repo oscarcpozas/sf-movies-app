@@ -10,7 +10,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.oscar.pozas.github.sf.movies.data.source.FilmsDataSource;
+import com.oscar.pozas.github.sf.movies.domain.UseCase;
 import com.oscar.pozas.github.sf.movies.domain.main.model.Film;
+import com.oscar.pozas.github.sf.movies.domain.main.usecase.GetFilms;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,11 +46,10 @@ public class FilmsRemoteDataSource implements FilmsDataSource {
     }
 
     @Override
-    public void getFilms(@NonNull GetFilmsCallback callback) {
+    public void getFilms(GetFilms.RequestValues requestValues, @NonNull GetFilmsCallback callback) {
         final OkHttpClient httpClient = new OkHttpClient();
 
-        Request request = new Request.Builder().url(baseURL)
-                .build();
+        Request request = new Request.Builder().url(baseURL).build();
 
         try {
             Response response = httpClient.newCall(request).execute();
@@ -56,32 +57,41 @@ public class FilmsRemoteDataSource implements FilmsDataSource {
             List<Film> films = gson.fromJson(response.body().charStream(),
                     new TypeToken<List<Film>>(){}.getType());
 
-            List<Film> filmsResult = parseFilms(films);
+            List<Film> filmsResult = parseFilms(films, requestValues.getmMinValue(),
+                    requestValues.getmMaxValue());
 
             callback.onFilmsLoaded(filmsResult);
         } catch (IOException e) { callback.onFilmsLoadedFail(); }
     }
 
     @Override
-    public void getFilms(String query, GetFilmsCallback callback) {
-        // No querys for remotte server
+    public void getFilms(GetFilms.RequestValues requestValues,
+                         String query, GetFilmsCallback callback) {
+        callback.onFilmsLoadedFail(); // Query not abalible in Remote
     }
 
-    private List<Film> parseFilms(List<Film> films) { // TODO Improve better logic
+    @Override
+    public void saveFilms(@NonNull List<Film> films) {
+
+    }
+
+    private List<Film> parseFilms(List<Film> films, int minValue, int maxValue) { // TODO Improve better logic
         List<Film> filmsResult = new ArrayList<>();
         for(Film film : films) {
             try {
-                if(film.getLocation() != null && !film.getLocation().isEmpty()) {
-                    final String street = film.getLocation() + ", San Francisco, CA";
-                    Log.d("LOCATIONS", street);
+                if(film.getReleaseYear() < minValue || film.getReleaseYear() > maxValue) {
+                    if (film.getLocation() != null && !film.getLocation().isEmpty()) {
+                        final String street = film.getLocation() + ", San Francisco, CA";
+                        Log.d("LOCATIONS", street);
 
-                    List<Address> streetLocation = mGeocoder.getFromLocationName(street, 1);
+                        List<Address> streetLocation = mGeocoder.getFromLocationName(street, 1);
 
-                    if(!streetLocation.isEmpty()) {
-                        LatLng location = new LatLng(streetLocation.get(0).getLatitude(),
-                                streetLocation.get(0).getLongitude());
-                        film.setStreetLocation(location);
-                        filmsResult.add(film);
+                        if (!streetLocation.isEmpty()) {
+                            LatLng location = new LatLng(streetLocation.get(0).getLatitude(),
+                                    streetLocation.get(0).getLongitude());
+                            film.setStreetLocation(location);
+                            filmsResult.add(film);
+                        }
                     }
                 }
             } catch (IOException e) {

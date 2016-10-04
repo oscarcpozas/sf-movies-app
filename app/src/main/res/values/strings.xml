@@ -3,4 +3,7 @@
     <string translatable="false" name="app_name">SF Movies</string>
     <string name="search_hint">Search...</string>
 
+    <string name="ok">Ok</string>
+    <string name="dialog_filter_name">Select period of time</string>
+
 </resources>

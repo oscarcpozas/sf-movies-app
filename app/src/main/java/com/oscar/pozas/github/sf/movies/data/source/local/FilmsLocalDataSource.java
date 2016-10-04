@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import com.orm.SugarRecord;
 import com.oscar.pozas.github.sf.movies.data.source.FilmsDataSource;
 import com.oscar.pozas.github.sf.movies.domain.main.model.Film;
+import com.oscar.pozas.github.sf.movies.domain.main.usecase.GetFilms;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class FilmsLocalDataSource implements FilmsDataSource {
     }
 
     @Override
-    public void getFilms(GetFilmsCallback callback) {  // TODO Improve better logic
+    public void getFilms(GetFilms.RequestValues requestValues, GetFilmsCallback callback) {  // TODO Improve better logic
         List<Film> films = SugarRecord.listAll(Film.class);
         if(films != null && !films.isEmpty()) {
             callback.onFilmsLoaded(films);
@@ -36,7 +37,8 @@ public class FilmsLocalDataSource implements FilmsDataSource {
     }
 
     @Override
-    public void getFilms(String query, GetFilmsCallback callback) {
+    public void getFilms(GetFilms.RequestValues requestValues, String query,
+                         GetFilmsCallback callback) {
 
     }
 
