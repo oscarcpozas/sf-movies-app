@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.oscar.pozas.github.sf.movies.data.source.FilmsRepository;
+import com.oscar.pozas.github.sf.movies.data.source.local.FilmsLocalDataSource;
 import com.oscar.pozas.github.sf.movies.data.source.remote.FilmsRemoteDataSource;
 import com.oscar.pozas.github.sf.movies.domain.UseCaseHandler;
 import com.oscar.pozas.github.sf.movies.domain.main.usecase.GetFilms;
@@ -18,7 +19,8 @@ public class Injection {
 
     public static FilmsRepository getFilmsRepository(@NonNull Context context) {
         checkNotNull(context);
-        return FilmsRepository.getInstance(FilmsRemoteDataSource.getInstance(context));
+        return FilmsRepository.getInstance(FilmsRemoteDataSource.getInstance(context),
+                FilmsLocalDataSource.getInstance(context));
     }
 
     /**

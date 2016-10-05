@@ -59,12 +59,5 @@ public class MainPresenterTest {
 
         verify(mMainView).showMarksInMap(films);
     }
-
-    @Test
-    public void searchFilmByNameAndLoadIntoView() {
-        mMainPresenter.searchQuery("");
-
-        verify(mFilmsRepository);
-    }
     
 }
